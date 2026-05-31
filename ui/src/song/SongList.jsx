@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Redirect, useLocation } from 'react-router-dom'
 import {
   AutocompleteArrayInput,
   Filter,
@@ -36,6 +37,7 @@ import { AlbumLinkField } from './AlbumLinkField'
 import { SongBulkActions, QualityInfo, useSelectedFields } from '../common'
 import config from '../config'
 import ExpandInfoDialog from '../dialogs/ExpandInfoDialog'
+import { getPersistedListParams, listParamsToSearch } from '../store/listParams'
 
 const useStyles = makeStyles({
   contextHeader: {
@@ -133,6 +135,7 @@ const SongList = (props) => {
   const dispatch = useDispatch()
   const isXsmall = useMediaQuery((theme) => theme.breakpoints.down('xs'))
   const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'))
+  const location = useLocation()
   useResourceRefresh('song')
 
   const handleRowClick = (id, basePath, record) => {
@@ -203,6 +206,13 @@ const SongList = (props) => {
       'createdAt',
     ],
   })
+
+  if (!location.search) {
+    const search = listParamsToSearch(getPersistedListParams('song'))
+    if (search) {
+      return <Redirect to={`/song?${search}`} />
+    }
+  }
 
   return (
     <>

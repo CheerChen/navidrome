@@ -10,6 +10,7 @@ import { all, fork } from 'redux-saga/effects'
 import { adminReducer, adminSaga, USER_LOGOUT } from 'react-admin'
 import throttle from 'lodash.throttle'
 import { loadState, saveState } from './persistState'
+import { pickListParams } from './listParams'
 
 const createAdminStore = ({
   authProvider,
@@ -40,8 +41,9 @@ const createAdminStore = ({
       })) ||
     compose
 
-  const persistedState = loadState()
-  if (persistedState?.player?.savedPlayIndex) {
+  const persistedState = { ...(loadState() || {}) }
+  delete persistedState.listParams
+  if (persistedState.player?.savedPlayIndex) {
     persistedState.player.playIndex = persistedState.player.savedPlayIndex
   }
   const store = createStore(
@@ -65,6 +67,7 @@ const createAdminStore = ({
         }))(state.player),
         albumView: state.albumView,
         settings: state.settings,
+        listParams: pickListParams(state.admin.resources),
       })
     }),
     1000,
