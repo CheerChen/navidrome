@@ -32,6 +32,10 @@ WORKDIR /app
 # Install node dependencies
 COPY ui/package.json ui/package-lock.json ./
 COPY ui/bin/ ./bin/
+# patches/ holds patch-package diffs (e.g. lyrics fix for
+# navidrome-music-player); the postinstall hook needs these present
+# at `npm ci` time.
+COPY ui/patches/ ./patches/
 RUN npm ci
 
 # Build bundle

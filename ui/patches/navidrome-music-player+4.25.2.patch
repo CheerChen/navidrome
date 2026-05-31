@@ -1,0 +1,36 @@
+diff --git a/node_modules/navidrome-music-player/es/index.js b/node_modules/navidrome-music-player/es/index.js
+index 1627394..92081da 100644
+--- a/node_modules/navidrome-music-player/es/index.js
++++ b/node_modules/navidrome-music-player/es/index.js
+@@ -1272,9 +1272,12 @@ var ReactJkMusicPlayer = /*#__PURE__*/function (_PureComponent) {
+       return audioLists[playIndex] && audioLists[playIndex][PLAYER_KEY];
+     });
+     _defineProperty(_this, "initLyricParser", function () {
++      if (_this.lyric) {
++        _this.lyric.stop();
++      }
+       _this.lyric = new Lyric(_this.state.lyric, _this.onLyricChange);
+       _this.setState({
+-        currentLyric: _this.lyric.lines[0] && _this.lyric.lines[0].text
++        currentLyric: (_this.lyric.lines[0] && _this.lyric.lines[0].txt) || ''
+       });
+     });
+     _defineProperty(_this, "onLyricChange", function (_ref10) {
+diff --git a/node_modules/navidrome-music-player/lib/index.js b/node_modules/navidrome-music-player/lib/index.js
+index fa9fb50..f47d2c9 100644
+--- a/node_modules/navidrome-music-player/lib/index.js
++++ b/node_modules/navidrome-music-player/lib/index.js
+@@ -1278,9 +1278,12 @@ var ReactJkMusicPlayer = exports["default"] = /*#__PURE__*/function (_PureCompon
+       return audioLists[playIndex] && audioLists[playIndex][_player.PLAYER_KEY];
+     });
+     _defineProperty(_this, "initLyricParser", function () {
++      if (_this.lyric) {
++        _this.lyric.stop();
++      }
+       _this.lyric = new _lyric["default"](_this.state.lyric, _this.onLyricChange);
+       _this.setState({
+-        currentLyric: _this.lyric.lines[0] && _this.lyric.lines[0].text
++        currentLyric: (_this.lyric.lines[0] && _this.lyric.lines[0].txt) || ''
+       });
+     });
+     _defineProperty(_this, "onLyricChange", function (_ref10) {
