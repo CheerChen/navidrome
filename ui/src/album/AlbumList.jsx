@@ -34,6 +34,7 @@ import AlbumInfo from './AlbumInfo'
 import ExpandInfoDialog from '../dialogs/ExpandInfoDialog'
 import { humanize } from 'inflection'
 import { makeStyles } from '@material-ui/core/styles'
+import { getPersistedListParams, listParamsToSearch } from '../store/listParams'
 
 const useStyles = makeStyles({
   chip: {
@@ -220,6 +221,10 @@ const AlbumList = (props) => {
   // If it does not have filter/sort params (usually coming from Menu),
   // reload with correct filter/sort params
   if (!location.search) {
+    const search = listParamsToSearch(getPersistedListParams('album'))
+    if (search) {
+      return <Redirect to={`${location.pathname}?${search}`} />
+    }
     const type =
       albumListType || localStorage.getItem('defaultView') || defaultAlbumList
     const listParams = albumLists[type]
