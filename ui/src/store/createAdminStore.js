@@ -43,7 +43,7 @@ const createAdminStore = ({
 
   const persistedState = { ...(loadState() || {}) }
   delete persistedState.listParams
-  if (persistedState.player?.savedPlayIndex) {
+  if (persistedState?.player?.savedPlayIndex) {
     persistedState.player.playIndex = persistedState.player.savedPlayIndex
   }
   const store = createStore(
