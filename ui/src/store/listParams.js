@@ -1,4 +1,4 @@
-import { stringify } from 'query-string'
+import { parse, stringify } from 'query-string'
 
 const LIST_PARAM_RESOURCES = ['album', 'song']
 
@@ -37,10 +37,18 @@ export const getPersistedListParams = (resource) => {
   }
 }
 
-export const listParamsToSearch = (params) => {
+export const listParamsToSearch = (params, fallbackSearch = '') => {
+  const fallbackParams = fallbackSearch
+    ? parse(fallbackSearch.startsWith('?') ? fallbackSearch.slice(1) : fallbackSearch)
+    : {}
   const persistableParams = getPersistableParams(params)
-  if (!persistableParams) {
+  const searchParams = {
+    ...fallbackParams,
+    ...persistableParams,
+  }
+
+  if (!Object.keys(searchParams).length) {
     return ''
   }
-  return stringify(persistableParams)
+  return stringify(searchParams)
 }

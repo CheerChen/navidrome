@@ -221,10 +221,6 @@ const AlbumList = (props) => {
   // If it does not have filter/sort params (usually coming from Menu),
   // reload with correct filter/sort params
   if (!location.search) {
-    const search = listParamsToSearch(getPersistedListParams('album'))
-    if (search) {
-      return <Redirect to={`${location.pathname}?${search}`} />
-    }
     const type =
       albumListType || localStorage.getItem('defaultView') || defaultAlbumList
     const listParams = albumLists[type]
@@ -232,7 +228,10 @@ const AlbumList = (props) => {
       refresh()
     }
     if (listParams) {
-      return <Redirect to={`/album/${type}?${listParams.params}`} />
+      const persistedParams =
+        type === 'all' ? getPersistedListParams('album') : undefined
+      const search = listParamsToSearch(persistedParams, listParams.params)
+      return <Redirect to={`/album/${type}?${search}`} />
     }
   }
 
