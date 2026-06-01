@@ -23,7 +23,7 @@ const albumLists = {
         activeIcon={AlbumIcon}
       />
     ),
-    params: 'sort=name&order=ASC&filter={}',
+    params: 'sort=max_year&order=DESC&filter={}',
   },
   random: {
     icon: <ShuffleIcon />,
@@ -80,4 +80,4 @@ const albumLists = {
 }
 
 export default albumLists
-export const defaultAlbumList = 'recentlyAdded'
+export const defaultAlbumList = 'all'

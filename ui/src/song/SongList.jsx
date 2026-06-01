@@ -218,12 +218,12 @@ const SongList = (props) => {
     <>
       <List
         {...props}
-        sort={{ field: 'title', order: 'ASC' }}
+        sort={{ field: 'year', order: 'DESC' }}
         exporter={false}
         bulkActionButtons={<SongBulkActions />}
         actions={<SongListActions />}
         filters={<SongFilter />}
-        perPage={isXsmall ? 50 : 15}
+        perPage={isXsmall ? 50 : 25}
       >
         {isXsmall ? (
           <SongSimpleList />
