@@ -15,7 +15,7 @@ import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline'
 import ViewModuleIcon from '@material-ui/icons/ViewModule'
 import { useDispatch, useSelector } from 'react-redux'
 import { albumViewGrid, albumViewTable } from '../actions'
-import { ToggleFieldsMenu } from '../common'
+import { ListSortMenu, ToggleFieldsMenu } from '../common'
 
 const useStyles = makeStyles({
   title: { margin: '1rem' },
@@ -69,6 +69,18 @@ const AlbumViewToggler = React.forwardRef(
 
 AlbumViewToggler.displayName = 'AlbumViewToggler'
 
+const albumSortChoices = [
+  { field: 'name', order: 'ASC', label: 'Name' },
+  { field: 'artist', order: 'ASC', label: 'Artist' },
+  { field: 'max_year', order: 'DESC', label: 'Year, newest first' },
+  { field: 'max_year', order: 'ASC', label: 'Year, oldest first' },
+  { field: 'recently_added', order: 'DESC', label: 'Recently added' },
+  { field: 'play_date', order: 'DESC', label: 'Recently played' },
+  { field: 'play_count', order: 'DESC', label: 'Most played' },
+  { field: 'rating', order: 'DESC', label: 'Rating' },
+  { field: 'starred_at', order: 'DESC', label: 'Favorites' },
+]
+
 const AlbumListActions = ({
   currentSort,
   className,
@@ -92,6 +104,7 @@ const AlbumListActions = ({
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
       {filters &&
+        isNotSmall &&
         cloneElement(filters, {
           resource,
           showFilter,
@@ -106,7 +119,10 @@ const AlbumListActions = ({
           hideColumns={albumView.grid}
         />
       ) : (
-        <AlbumViewToggler showTitle={false} />
+        <>
+          <ListSortMenu choices={albumSortChoices} />
+          <AlbumViewToggler showTitle={false} />
+        </>
       )}
     </TopToolbar>
   )

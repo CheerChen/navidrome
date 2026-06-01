@@ -34,6 +34,7 @@ import AlbumInfo from './AlbumInfo'
 import ExpandInfoDialog from '../dialogs/ExpandInfoDialog'
 import { humanize } from 'inflection'
 import { makeStyles } from '@material-ui/core/styles'
+import { getPersistedListParams, listParamsToSearch } from '../store/listParams'
 
 const useStyles = makeStyles({
   chip: {
@@ -227,7 +228,10 @@ const AlbumList = (props) => {
       refresh()
     }
     if (listParams) {
-      return <Redirect to={`/album/${type}?${listParams.params}`} />
+      const persistedParams =
+        type === 'all' ? getPersistedListParams('album') : undefined
+      const search = listParamsToSearch(persistedParams, listParams.params)
+      return <Redirect to={`/album/${type}?${search}`} />
     }
   }
 
