@@ -124,7 +124,7 @@ const Admin = (props) => {
       {...props}
     >
       {(permissions) => [
-        <Resource name="album" {...album} options={{ subMenu: 'albumList' }} />,
+        <Resource name="album" {...album} />,
         <Resource name="artist" {...artist} />,
         <Resource name="song" {...song} />,
         <Resource
@@ -177,6 +177,7 @@ const Admin = (props) => {
         <Resource name="translation" />,
         <Resource name="genre" />,
         <Resource name="tag" />,
+        <Resource name="albumShuffle" />,
         <Resource name="playlistTrack" />,
         <Resource name="keepalive" />,
         <Resource name="insights" />,

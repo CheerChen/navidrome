@@ -4,10 +4,7 @@ import { Divider, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { useTranslate, MenuItemLink, getResources } from 'react-admin'
 import ViewListIcon from '@material-ui/icons/ViewList'
-import AlbumIcon from '@material-ui/icons/Album'
-import SubMenu from './SubMenu'
 import { humanize, pluralize } from 'inflection'
-import albumLists from '../album/albumLists'
 import PlaylistsSubMenu from './PlaylistsSubMenu'
 import LibrarySelector from '../common/LibrarySelector'
 import config from '../config'
@@ -55,7 +52,6 @@ const Menu = ({ dense = false }) => {
 
   // TODO State is not persisted in mobile when you close the sidebar menu. Move to redux?
   const [state, setState] = useState({
-    menuAlbumList: true,
     menuPlaylists: true,
     menuSharedPlaylists: true,
   })
@@ -76,32 +72,6 @@ const Menu = ({ dense = false }) => {
     />
   )
 
-  const renderAlbumMenuItemLink = (type, al) => {
-    const resource = resources.find((r) => r.name === 'album')
-    if (!resource) {
-      return null
-    }
-
-    const albumListAddress = `/album/${type}`
-
-    const name = translate(`resources.album.lists.${type || 'default'}`, {
-      _: translatedResourceName(resource, translate),
-    })
-
-    return (
-      <MenuItemLink
-        key={albumListAddress}
-        to={albumListAddress}
-        activeClassName={classes.active}
-        primaryText={name}
-        leftIcon={al.icon || <ViewListIcon />}
-        sidebarIsOpen={open}
-        dense={dense}
-        exact
-      />
-    )
-  }
-
   const subItems = (subMenu) => (resource) =>
     resource.hasList && resource.options && resource.options.subMenu === subMenu
 
@@ -113,18 +83,6 @@ const Menu = ({ dense = false }) => {
       })}
     >
       {open && <LibrarySelector />}
-      <SubMenu
-        handleToggle={() => handleToggle('menuAlbumList')}
-        isOpen={state.menuAlbumList}
-        sidebarIsOpen={open}
-        name="menu.albumList"
-        icon={<AlbumIcon />}
-        dense={dense}
-      >
-        {Object.keys(albumLists).map((type) =>
-          renderAlbumMenuItemLink(type, albumLists[type]),
-        )}
-      </SubMenu>
       {resources.filter(subItems(undefined)).map(renderResourceMenuItemLink)}
       {config.devSidebarPlaylists && open ? (
         <>

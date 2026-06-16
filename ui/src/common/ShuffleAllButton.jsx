@@ -5,7 +5,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle'
 import { playTracks } from '../actions'
 import PropTypes from 'prop-types'
 
-export const ShuffleAllButton = ({ filters }) => {
+export const ShuffleAllButton = ({ filters, resource }) => {
   const translate = useTranslate()
   const dataProvider = useDataProvider()
   const dispatch = useDispatch()
@@ -14,7 +14,7 @@ export const ShuffleAllButton = ({ filters }) => {
 
   const handleOnClick = () => {
     dataProvider
-      .getList('song', {
+      .getList(resource, {
         pagination: { page: 1, perPage: 500 },
         sort: { field: 'random', order: 'ASC' },
         filter: filters,
@@ -43,7 +43,9 @@ export const ShuffleAllButton = ({ filters }) => {
 
 ShuffleAllButton.propTypes = {
   filters: PropTypes.object,
+  resource: PropTypes.string,
 }
 ShuffleAllButton.defaultProps = {
   filters: {},
+  resource: 'song',
 }

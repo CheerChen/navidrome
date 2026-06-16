@@ -15,7 +15,7 @@ import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline'
 import ViewModuleIcon from '@material-ui/icons/ViewModule'
 import { useDispatch, useSelector } from 'react-redux'
 import { albumViewGrid, albumViewTable } from '../actions'
-import { ListSortMenu, ToggleFieldsMenu } from '../common'
+import { ListSortMenu, ShuffleAllButton, ToggleFieldsMenu } from '../common'
 
 const useStyles = makeStyles({
   title: { margin: '1rem' },
@@ -103,6 +103,7 @@ const AlbumListActions = ({
   const albumView = useSelector((state) => state.albumView)
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      <ShuffleAllButton filters={filterValues} resource="albumShuffle" />
       {filters &&
         isNotSmall &&
         cloneElement(filters, {

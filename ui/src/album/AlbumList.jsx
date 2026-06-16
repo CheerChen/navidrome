@@ -28,7 +28,7 @@ import {
 import AlbumListActions from './AlbumListActions'
 import AlbumTableView from './AlbumTableView'
 import AlbumGridView from './AlbumGridView'
-import albumLists, { defaultAlbumList } from './albumLists'
+import albumLists from './albumLists'
 import config from '../config'
 import AlbumInfo from './AlbumInfo'
 import ExpandInfoDialog from '../dialogs/ExpandInfoDialog'
@@ -183,6 +183,19 @@ const AlbumListPagination = ({ albumListType, ...rest }) => {
 }
 
 const randomStartingSeed = Math.random().toString()
+const defaultAlbumSort = { field: 'max_year', order: 'DESC' }
+
+const omitDefaultAlbumSort = (params) => {
+  if (
+    params?.sort !== defaultAlbumSort.field ||
+    params?.order !== defaultAlbumSort.order
+  ) {
+    return params
+  }
+
+  const { sort, order, ...rest } = params
+  return Object.keys(rest).length ? rest : undefined
+}
 
 const AlbumList = (props) => {
   const { width } = props
@@ -218,20 +231,26 @@ const AlbumList = (props) => {
     ['createdAt', 'size'],
   )
 
-  // If it does not have filter/sort params (usually coming from Menu),
-  // reload with correct filter/sort params
+  // Typed album lists still need their predefined filters/sorts. The default
+  // /album route follows react-admin's List defaults, like /song, so default
+  // sort params do not have to be mirrored in the URL.
   if (!location.search) {
-    const type =
-      albumListType || localStorage.getItem('defaultView') || defaultAlbumList
-    const listParams = albumLists[type]
-    if (type === 'random') {
-      refresh()
-    }
-    if (listParams) {
-      const persistedParams =
-        type === 'all' ? getPersistedListParams('album') : undefined
-      const search = listParamsToSearch(persistedParams, listParams.params)
-      return <Redirect to={`/album/${type}?${search}`} />
+    if (!albumListType) {
+      const search = listParamsToSearch(
+        omitDefaultAlbumSort(getPersistedListParams('album')),
+      )
+      if (search) {
+        return <Redirect to={`/album?${search}`} />
+      }
+    } else {
+      const listParams = albumLists[albumListType]
+      if (albumListType === 'random') {
+        refresh()
+      }
+      if (listParams) {
+        const search = listParamsToSearch(undefined, listParams.params)
+        return <Redirect to={`/album/${albumListType}?${search}`} />
+      }
     }
   }
 
@@ -241,6 +260,7 @@ const AlbumList = (props) => {
         {...props}
         exporter={false}
         bulkActionButtons={false}
+        sort={defaultAlbumSort}
         filter={{ seed }}
         actions={<AlbumListActions />}
         filters={<AlbumFilter />}

@@ -35,7 +35,14 @@ const getSelectedLibraries = () => {
 // Function to apply library filtering to appropriate resources
 const applyLibraryFilter = (resource, params) => {
   // Content resources that should be filtered by selected libraries
-  const filteredResources = ['album', 'song', 'artist', 'playlistTrack', 'tag']
+  const filteredResources = [
+    'album',
+    'albumShuffle',
+    'song',
+    'artist',
+    'playlistTrack',
+    'tag',
+  ]
 
   // Get selected libraries from localStorage
   const selectedLibraries = getSelectedLibraries()
@@ -67,6 +74,7 @@ const mapResource = (resource, params) => {
       return [`playlist/${plsId}/tracks`, params]
     }
     case 'album':
+    case 'albumShuffle':
     case 'song':
     case 'artist':
     case 'tag': {
